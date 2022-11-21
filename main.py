@@ -1,3 +1,4 @@
+import sqlite3
 import sys
 
 from PyQt5 import QtGui
@@ -126,6 +127,9 @@ class Pos(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+
+        self.lose_count = 0
+        self.parties_count = 0
 
         self.b_size, self.n_mines = LEVELS[1]
 
@@ -276,6 +280,8 @@ class MainWindow(QMainWindow):
             self.clock.setText("%03d" % n_secs)
 
     def game_over(self):
+        #self.parties_count += 1
+        #self.lose_count += 1
         self.reveal_map()
         self.update_status(STATUS_FAILED)
 
@@ -284,9 +290,27 @@ class MainWindow(QMainWindow):
         self.update_status(STATUS_FAILED)
 
     def restart(self):
+        self.parties_count += 1
         self.reset_map()
         self.status = STATUS_READY
         self.update_timer()
+
+    # def statistic(self):
+    #     conn = sqlite3.connect('MineSweeper_db.db')
+    #
+    #     cur = conn.cursor()
+    #
+    #     cur.execute("""CREATE TABLE IF NOT EXISTS Statistic(
+    #        Parties INT,
+    #        Loses INT);
+    #     """)
+    #
+    #     cur.execute("""INSERT INTO Statistic(Parties, Loses)
+    #        VALUES();""")
+    #
+    #     conn.commit()
+    #
+    #     conn.close()
 
 
 def except_hook(cls, exception, traceback):
@@ -297,5 +321,3 @@ if __name__ == '__main__':
     app = QApplication([])
     window = MainWindow()
     app.exec_()
-
-#a
